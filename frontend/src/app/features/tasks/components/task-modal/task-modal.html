@@ -1,0 +1,66 @@
+@if (isOpen) {
+<div class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>{{ mode === 'create' ? 'Create Task' : mode === 'view' ? 'View Task' : 'Edit Task' }}</h2>
+            <button class="close-button" type="button" (click)="onClose()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <form (ngSubmit)="onSubmit(taskForm)" class="modal-form" #taskForm="ngForm">
+            <label>
+                Title
+                <input type="text" name="title" [(ngModel)]="taskFormModel.title" required
+                    [readonly]="mode === 'view'" />
+            </label>
+
+            <label>
+                Description
+                <textarea name="description" [(ngModel)]="taskFormModel.description" rows="4"
+                    [readonly]="mode === 'view'"></textarea>
+            </label>
+
+            <div class="form-row">
+                <label>
+                    Status
+                    <select name="status" [(ngModel)]="taskFormModel.status" [disabled]="mode === 'view'">
+                        <option value="TODO">Todo</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </label>
+
+                <label>
+                    Priority
+                    <select name="priority" [(ngModel)]="taskFormModel.priority" [disabled]="mode === 'view'">
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                    </select>
+                </label>
+            </div>
+
+            <label>
+                Due date
+                <input type="date" [(ngModel)]="taskFormModel.dueDate" name="dueDate" [readonly]="mode === 'view'" />
+            </label>
+
+            <div class="modal-divider"></div>
+
+            <div class="modal-actions">
+                <button type="button" class="secondary-button" (click)="onClose()">
+                    Close
+                </button>
+                @if (mode !== 'view') {
+                <button type="submit" class="primary-button">
+                    {{ mode === 'create' ? 'Create' : 'Save Changes' }}
+                </button>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+}
