@@ -23,7 +23,7 @@ export class LoginPage implements OnInit {
   });
   loginForm = form(this.loginModel);
   signupModel = signal<Signup>({
-    username: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -51,7 +51,6 @@ export class LoginPage implements OnInit {
 
     const password = this.signupForm.password().value();
     const confirmPassword = this.signupForm.confirmPassword().value();
-    console.log(password, confirmPassword)
     if(!password || !confirmPassword) {
       return false;
     }
@@ -73,7 +72,8 @@ export class LoginPage implements OnInit {
 
     if (this.hasAccount) {
       this.authService.login(this.loginForm().value()).subscribe({
-        next: () => {
+        next: (authresponse) => {
+          this.authService.currentUser.set({...authresponse});
           this.router.navigate(['/tasks']);
         },
         error: (err) => {
@@ -84,10 +84,9 @@ export class LoginPage implements OnInit {
       });
     } else {
       const user: User = {
-        name: this.signupForm.username().value()?.trim() ?? '',
+        name: this.signupForm.name().value()?.trim() ?? '',
         password: this.signupForm.password().value()?.trim() ?? '',
         email: this.signupForm.email().value()?.trim() ?? '',
-        role: 'USER'
       };
       this.authService.signup(user).subscribe({
         next: () => {

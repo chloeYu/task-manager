@@ -9,7 +9,5 @@ import com.bokyungyu.taskmanager.model.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    public Optional<User> findByEmailAndPassword(String email, String password);
-
     public Optional<User> findByEmail(String email);
 }

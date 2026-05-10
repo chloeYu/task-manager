@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { AppLoading } from '../../../../shared/components/app-loading/app-loading';
 import { HttpEvent } from '@angular/common/http';
 import { AuthService } from '../../../auth/services/auth.service';
+import { User } from '../../../auth/models/user.model';
 
 @Component({
   selector: 'app-task-list-page',
@@ -22,6 +23,7 @@ export class TaskListPage implements OnInit {
   readonly currentTask = signal<Task | undefined>(undefined);
   readonly status = signal<string | null>(null);
   readonly searchTerm = signal<string>('');
+  user = signal<User | null>(null);
   readonly filteredTasks = computed<Task[]>(() => {
     if (this.status()) {
       return this.tasks().filter(task => task.status === this.status() && task.title.includes(this.searchTerm()));
@@ -30,11 +32,11 @@ export class TaskListPage implements OnInit {
   });
 
   private readonly taskService = inject(TaskService);
-
   constructor(private authService: AuthService) {} 
 
   ngOnInit(): void {
     this.refreshTasks();
+    this.user.set(this.authService.currentUser());
   }
 
   refreshTasks(): void {

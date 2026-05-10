@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.bokyungyu.taskmanager.model.enums.Priority;
 import com.bokyungyu.taskmanager.model.enums.TaskStatus;
 
 import jakarta.persistence.Entity;
@@ -14,12 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
-
-enum PRIORITY {
-    LOW,
-    MEDIUM,
-    HIGH
-}
 
 @Entity
 @Data
@@ -31,7 +26,7 @@ public class Task {
     private String description;
     private LocalDate dueDate;
     private TaskStatus status;
-    private PRIORITY priority;
+    private Priority priority;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @ManyToOne

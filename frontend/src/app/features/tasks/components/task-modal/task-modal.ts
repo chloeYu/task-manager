@@ -38,10 +38,9 @@ export class TaskModal implements OnChanges {
     return {
       title: '',
       description: '',
-      user: { id: this.authService?.getCurrentUser()?.id, name: 'test', email: 'test@test.com', password: '', role: 'USER' },
+      dueDate: '',
       status: 'TODO',
       priority: 'MEDIUM',
-      createdAt: ''
     };
   }
 

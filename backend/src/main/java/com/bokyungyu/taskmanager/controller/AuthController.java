@@ -1,18 +1,24 @@
 package com.bokyungyu.taskmanager.controller;
 
-import java.util.Optional;
+import java.net.http.HttpResponse;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import com.bokyungyu.taskmanager.model.dto.LoginRequest;
+import com.bokyungyu.taskmanager.model.dto.AuthResponse;
+import com.bokyungyu.taskmanager.model.dto.SignupRequest;
+import com.bokyungyu.taskmanager.model.dto.AuthRequest;
 import com.bokyungyu.taskmanager.model.entity.User;
 import com.bokyungyu.taskmanager.service.AuthService;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,15 +27,27 @@ public class AuthController {
 
     public AuthController(AuthService authService) {
         this.authService = authService;
+
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<AuthResponse> getCurrentUser() {
+        return authService.getCurrentUser();
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request) {
-        return this.authService.login(request.getEmail(), request.getPassword());
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        return authService.login(request);
     }
 
     @PostMapping("/signup")
-    public User signup(@RequestBody User user) {
+    public User signup(@RequestBody SignupRequest user) {
         return this.authService.signup(user);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return this.authService.logout();
+    }
+
 }
